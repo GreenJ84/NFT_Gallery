@@ -12,12 +12,12 @@ interface inputType{
 }
 
 const InputModal = (props: inputType) => {
+  const { account } = useSelector((state: storeType) => state )
   const { fetchA, fetchC } = props;
   const [open, setOpen] = useState(false);
-  const [acct, setAcct] = useState('');
+  const [acct, setAcct] = useState(account.value);
   const [coll, setColl] = useState('');
   const dispatch = useDispatch();
-  const { account } = useSelector((state: storeType) => state )
 
   const modalHandler = () => {
     if (open) {
@@ -31,16 +31,12 @@ const InputModal = (props: inputType) => {
     await dispatch(setCollection(""));
   }
   const storeHandler = async (op: string) => {
-    console.log("top");
-    // await clearStore();
-    console.log("switch");
-    switch(op){
+    await clearStore();
+    switch (op) {
       case "account":
         let x = document.getElementById("account")! as HTMLInputElement;
-        console.log("top switch");
         dispatch(setAccount(x.value));
         await fetchA();
-      console.log("mid switch");
         setColl("");
         break;
       case "collection":
@@ -60,7 +56,8 @@ const InputModal = (props: inputType) => {
         storeHandler(op);
     }
     setOpen(false);
-  }
+  };
+  
 
   return (
     <>
@@ -71,7 +68,6 @@ const InputModal = (props: inputType) => {
           </button>
           <p>Select the Gallery you want to see by checking out an Ethereum collection or a Wallet's NFTs</p>
           <div>
-            {acct}
             <input id="account"
               type="text" value={acct}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -81,7 +77,6 @@ const InputModal = (props: inputType) => {
             <button onClick={() => storeHandler("account")}> Search Account </button>
           </div>
           <div>
-            {coll}
             <input id="collection" type="text"
               value={coll}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
