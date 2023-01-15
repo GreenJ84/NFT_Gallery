@@ -93,8 +93,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
     method: "GET"
   }
 
-  const _nfts = await fetch(Url, requestOptions)
+  let _nfts = await fetch(Url, requestOptions)
     .then(data => data.json())
+  
+  let i = 0
+  while (i < 2) {
+    _nfts.ownedNfts.push(_nfts.ownedNfts.shift())
+    i++;
+  }
 
   return {
     props: {
